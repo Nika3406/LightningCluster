@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import './App.css';
 
 function App() {
   const [strikes, setStrikes] = useState([]);
   const [clusters, setClusters] = useState([]);
-  const [stats, setStats] = useState({ strikes: 0, clusters: 0 });
+  const [stats, setStats] = useState({ strikes: 0, clusters: 0, lastUpdate: null });
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/lightning');
+      // Use a relative path so the frontend works both when served by backend and when
+      // you deploy under the same origin. If you run CRA dev server and need to reach a
+      // backend on another port, set up a proxy or use an env var.
+      const response = await fetch('/api/lightning');
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
       const data = await response.json();
-      setStrikes(data.strikes || []);
-      setClusters(data.clusters || []);
+      const strikesData = data.strikes || [];
+      const clustersData = data.clusters || [];
+      setStrikes(strikesData);
+      setClusters(clustersData);
       setStats({
-        strikes: data.strikes.length,
-        clusters: data.clusters.length,
+        strikes: strikesData.length,
+        clusters: clustersData.length,
         lastUpdate: new Date().toLocaleTimeString()
       });
     } catch (err) {
-      console.log('Connecting to backend...');
+      // Show the full error in console so it's easier to diagnose connectivity/CORS errors
+      console.error('Error fetching lightning data:', err);
     }
   };
 

@@ -5,6 +5,10 @@ from aiohttp import web
 import os
 import math
 from blitzortung_parser import BlitzortungRawCollector
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class CMPSC463Algorithms:
@@ -172,10 +176,10 @@ class LightningAPI:
 
     def get_strikes(self):
         try:
-            if not os.path.exists("lightning_data.json"):
+            if not os.path.exists("lightning_messages_decoded.json"):
                 return []
 
-            with open("lightning_data.json", 'r', encoding='utf-8') as f:
+            with open("lightning_messages_decoded.json", 'r', encoding='utf-8') as f:
                 content = f.read().strip()
                 if content.startswith('[') and not content.endswith(']'):
                     content += ']'
@@ -191,7 +195,8 @@ class LightningAPI:
                         'intensity': strike.get('mcg', 1)
                     })
             return strikes
-        except:
+        except Exception as e:
+            logger.exception("Error reading strikes:")
             return []
 
     async def get_lightning_data(self, request):
@@ -216,21 +221,48 @@ class LightningAPI:
 
 async def start_server():
     api = LightningAPI()
-    asyncio.create_task(api.collector.collect_from_browser(duration_seconds=3600))
+
+    # Run collector in background and log exceptions
+    async def run_collector():
+        try:
+            await api.collector.collect_from_browser(duration_seconds=3600)
+        except Exception as e:
+            logger.exception("Collector failed:")
+
+    asyncio.create_task(run_collector())
 
     app = web.Application()
+
+    # Add API routes first
     app.router.add_get('/api/lightning', api.get_lightning_data)
-    app.router.add_static('/', path='../frontend/')
 
-    async def cors_middleware(app, handler):
-        async def middleware_handler(request):
-            response = await handler(request)
-            response.headers['Access-Control-Allow-Origin'] = '*'
-            return response
+    # CORS middleware (use aiohttp's middleware decorator)
+    @web.middleware
+    async def cors_middleware(request, handler):
+        # Handle preflight
+        if request.method == 'OPTIONS':
+            resp = web.Response(status=200)
+            resp.headers['Access-Control-Allow-Origin'] = '*'
+            resp.headers['Access-Control-Allow-Methods'] = 'GET,POST,OPTIONS'
+            resp.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+            return resp
 
-        return middleware_handler
+        response = await handler(request)
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET,POST,OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+        return response
 
     app.middlewares.append(cors_middleware)
+
+    # Serve frontend static files. Point to the public folder where index.html lives.
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frontend', 'public'))
+    if os.path.isdir(base_dir):
+        logger.info(f"Serving frontend static files from {base_dir}")
+        # serve static files for everything under '/'
+        app.router.add_static('/', path=base_dir, show_index=True)
+    else:
+        logger.warning(f"Frontend public folder not found at {base_dir}. Static files won't be served.")
 
     runner = web.AppRunner(app)
     await runner.setup()
