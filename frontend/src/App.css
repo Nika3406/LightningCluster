@@ -1,0 +1,171 @@
+.app-container {
+  height: 100vh;
+  position: relative;
+}
+
+.map-container {
+  height: 100%;
+  width: 100%;
+}
+
+.leaflet-container {
+  background: #1e293b;
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  padding: 20px;
+}
+
+.retry-button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.retry-button:hover {
+  background: #2563eb;
+}
+
+.control-panel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid #334155;
+  max-width: 300px;
+  color: white;
+}
+
+.control-panel h3 {
+  margin-bottom: 15px;
+  color: #60a5fa;
+  font-size: 18px;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 10px;
+}
+
+.control-group {
+  margin-bottom: 15px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  margin-right: 8px;
+}
+
+.slider-group {
+  margin-bottom: 15px;
+}
+
+.slider-group label {
+  font-size: 14px;
+}
+
+.radius-slider {
+  width: 100%;
+  margin-top: 5px;
+}
+
+.stats-panel {
+  margin: 15px 0;
+  padding: 15px;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 5px;
+}
+
+.stats-panel h4 {
+  margin-bottom: 10px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  font-size: 12px;
+}
+
+.legend {
+  margin-top: 15px;
+}
+
+.legend h4 {
+  margin-bottom: 10px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.legend-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.popup-content {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.popup-content strong {
+  color: #1e40af;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .control-panel {
+    position: relative;
+    top: 0;
+    right: 0;
+    max-width: none;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .app-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .map-container {
+    flex: 1;
+    min-height: 60vh;
+  }
+}

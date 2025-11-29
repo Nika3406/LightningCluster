@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lightning Heatmap</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: system-ui; background: #0f172a; color: white; }
+      #root { height: 100vh; }
+      .leaflet-container { background: #1e293b; }
+      .control-panel {
+        position: absolute; top: 10px; right: 10px; z-index: 1000;
+        background: rgba(15,23,42,0.9); padding: 15px; border-radius: 8px;
+        backdrop-filter: blur(10px); border: 1px solid #334155;
+      }
+      .stats { margin-top: 10px; font-size: 12px; color: #94a3b8; }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
