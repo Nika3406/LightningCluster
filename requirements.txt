@@ -2,3 +2,4 @@ websockets
 playwright
 asyncio
 aiohttp
+flask-cors
