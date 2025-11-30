@@ -94,7 +94,7 @@ function App() {
       </MapContainer>
 
       <div className="control-panel">
-        <h3 style={{ marginBottom: '10px', color: '#60a5fa' }}>⚡ CMPSC 463 Heatmap</h3>
+        <h3 style={{ marginBottom: '10px', color: '#60a5fa' }}>CMPSC 463 Heatmap</h3>
         <div className="stats">
           <div>Strikes: {stats.strikes}</div>
           <div>Clusters: {stats.clusters}</div>

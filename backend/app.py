@@ -1,22 +1,3 @@
-#!/usr/bin/env python3
-"""
-Flask app + simple orchestrator:
-
-- Ensures frontend is built (runs `npm ci` and `npm run build` in ../frontend when needed).
-- Starts and supervises the Playwright collector (blitzortung_parser.py) as a subprocess,
-  restarting it automatically if it exits (until this orchestrator is stopped).
-- Serves the built frontend (frontend/build) and provides /api/lightning which reads the
-  collector JSON and runs clustering algorithms.
-
-Run:
-    python3 backend/app.py
-
-Environment variables:
-    LIGHTNING_HOST (default 0.0.0.0)
-    LIGHTNING_PORT (default 8080)
-    PLAYWRIGHT_HEADLESS (1/true to run headless; passed to collector env)
-    SKIP_FRONTEND_BUILD (1/true to skip build step if you build manually)
-"""
 import os
 import sys
 import json
@@ -48,8 +29,11 @@ shutdown_event = threading.Event()
 collector_proc_lock = threading.Lock()
 collector_proc = None  # subprocess.Popen
 
-app = Flask(__name__, static_folder=str(FRONTEND_BUILD), static_url_path="/static")
-CORS(app)
+app = Flask(
+    __name__,
+    static_folder=str(FRONTEND_BUILD / "static"),
+    static_url_path="/static",
+)
 
 
 # ---------------------------
