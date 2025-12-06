@@ -1,6 +1,5 @@
 import asyncio
 import json
-import aiohttp
 from aiohttp import web
 import os
 import math

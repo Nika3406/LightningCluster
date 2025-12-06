@@ -10,7 +10,6 @@ import signal
 import shutil
 from pathlib import Path
 from flask import Flask, jsonify, send_from_directory
-from flask_cors import CORS
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("lightning-orchestrator")

@@ -100,7 +100,7 @@ function App() {
           <div>Clusters: {stats.clusters}</div>
           <div>Last: {stats.lastUpdate}</div>
           <div style={{ marginTop: '8px', fontSize: '10px', color: '#64748b' }}>
-            Algorithms: BFS • Greedy • Prim's MST
+            Algorithms: BFS * Greedy * Prim's MST
           </div>
         </div>
       </div>
